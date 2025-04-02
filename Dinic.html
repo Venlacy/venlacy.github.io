@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Dinic.html</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="generator" content="SynEdit HTML exporter" />
+<style type="text/css">
+<!--
+body { color: #000000; background-color: #293134; }
+.cpp1-assembler { color: #93C763; }
+.cpp1-character { color: #FF8409; }
+.cpp1-comment { color: #66747B; font-style: italic; }
+.cpp1-float { color: #FFCD22; }
+.cpp1-hexadecimal { color: #FFCD22; }
+.cpp1-identifier { color: #E0E2E4; }
+.cpp1-illegalchar { color: #FB0000; }
+.cpp1-number { color: #FFCD22; }
+.cpp1-octal { color: #FFCD22; }
+.cpp1-preprocessor { color: #A082BD; }
+.cpp1-reservedword { color: #678CB1; }
+.cpp1-space { background-color: #293134; }
+.cpp1-string { color: #EC7600; }
+.cpp1-symbol { color: #E8E2B7; }
+-->
+</style>
+</head>
+<body>
+<pre>
+<code><span style="font: 14pt Consolas;"><span class="cpp1-preprocessor">#include&lt;bits/stdc++.h&gt;
+#define int long long
+</span><span class="cpp1-reservedword">const</span><span class="cpp1-space"> </span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">N</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-float">2e5</span><span class="cpp1-symbol">+</span><span class="cpp1-number">5</span><span class="cpp1-symbol">;
+</span><span class="cpp1-reservedword">using</span><span class="cpp1-space"> </span><span class="cpp1-reservedword">namespace</span><span class="cpp1-space"> </span><span class="cpp1-identifier">std</span><span class="cpp1-symbol">;
+</span><span class="cpp1-reservedword">struct</span><span class="cpp1-space"> </span><span class="cpp1-identifier">node
+</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">to</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">nxt</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">;
+}</span><span class="cpp1-space"> </span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">N</span><span class="cpp1-symbol">];
+</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">n</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">m</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">cnt</span><span class="cpp1-symbol">=</span><span class="cpp1-number">1</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">s</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">t</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">N</span><span class="cpp1-symbol">];
+</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">head</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">N</span><span class="cpp1-symbol">];
+</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">cur</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">N</span><span class="cpp1-symbol">];
+</span><span class="cpp1-reservedword">bool</span><span class="cpp1-space"> </span><span class="cpp1-identifier">bfs</span><span class="cpp1-symbol">()
+{
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">memset</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">,</span><span class="cpp1-number">0</span><span class="cpp1-symbol">,</span><span class="cpp1-reservedword">sizeof</span><span class="cpp1-space"> </span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">);
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">queue</span><span class="cpp1-symbol">&lt;</span><span class="cpp1-reservedword">int</span><span class="cpp1-symbol">&gt;</span><span class="cpp1-identifier">q</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">q</span><span class="cpp1-symbol">.</span><span class="cpp1-identifier">push</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">s</span><span class="cpp1-symbol">);
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">s</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-number">1</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">while</span><span class="cpp1-symbol">(!</span><span class="cpp1-identifier">q</span><span class="cpp1-symbol">.</span><span class="cpp1-identifier">empty</span><span class="cpp1-symbol">())
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">		</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">r</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">q</span><span class="cpp1-symbol">.</span><span class="cpp1-identifier">front</span><span class="cpp1-symbol">();
+</span><span class="cpp1-space">		</span><span class="cpp1-identifier">q</span><span class="cpp1-symbol">.</span><span class="cpp1-identifier">pop</span><span class="cpp1-symbol">();
+</span><span class="cpp1-space">		</span><span class="cpp1-reservedword">for</span><span class="cpp1-symbol">(</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">=</span><span class="cpp1-identifier">head</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">r</span><span class="cpp1-symbol">];</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">nxt</span><span class="cpp1-symbol">)
+</span><span class="cpp1-space">		</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">			</span><span class="cpp1-reservedword">if</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">w</span><span class="cpp1-space"> </span><span class="cpp1-symbol">&gt;</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-space"> </span><span class="cpp1-symbol">&amp;&amp;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">to</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">==</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">)
+</span><span class="cpp1-space">			</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">				</span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">to</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">r</span><span class="cpp1-symbol">]+</span><span class="cpp1-number">1</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">				</span><span class="cpp1-identifier">q</span><span class="cpp1-symbol">.</span><span class="cpp1-identifier">push</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">to</span><span class="cpp1-symbol">);
+</span><span class="cpp1-space">			</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">		</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">if</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">t</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">==</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">)
+</span><span class="cpp1-space">		</span><span class="cpp1-reservedword">return</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">return</span><span class="cpp1-space"> </span><span class="cpp1-number">1</span><span class="cpp1-symbol">;
+}
+</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">dfs</span><span class="cpp1-symbol">(</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">,</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">dis</span><span class="cpp1-symbol">)
+{
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">if</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">u</span><span class="cpp1-space"> </span><span class="cpp1-symbol">==</span><span class="cpp1-space"> </span><span class="cpp1-identifier">t</span><span class="cpp1-symbol">)</span><span class="cpp1-space"> </span><span class="cpp1-reservedword">return</span><span class="cpp1-space"> </span><span class="cpp1-identifier">dis</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">for</span><span class="cpp1-symbol">(</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-symbol">&amp;</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">=</span><span class="cpp1-identifier">cur</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">];</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">=</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">nxt</span><span class="cpp1-symbol">)
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">		</span><span class="cpp1-reservedword">if</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">to</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">==</span><span class="cpp1-space"> </span><span class="cpp1-identifier">depth</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">]+</span><span class="cpp1-number">1</span><span class="cpp1-space"> </span><span class="cpp1-symbol">&amp;&amp;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">w</span><span class="cpp1-space"> </span><span class="cpp1-symbol">!=</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">)</span><span class="cpp1-space"> </span><span class="cpp1-comment">//&iquest;&Eacute;&Ograve;&Ocirc;&Ocirc;&ouml;&sup1;&atilde;
+</span><span class="cpp1-space">		</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">			</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">di</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">dfs</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">to</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">min</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">dis</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">));
+</span><span class="cpp1-space">			</span><span class="cpp1-reservedword">if</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">di</span><span class="cpp1-space"> </span><span class="cpp1-symbol">&gt;</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">)
+</span><span class="cpp1-space">			</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">				</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">w</span><span class="cpp1-space"> </span><span class="cpp1-symbol">-=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">di</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">				</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">^</span><span class="cpp1-number">1</span><span class="cpp1-symbol">].</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">+=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">di</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">				</span><span class="cpp1-reservedword">return</span><span class="cpp1-space"> </span><span class="cpp1-identifier">di</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">			</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">		</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">return</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">;
+}
+</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">Dinic</span><span class="cpp1-symbol">()
+{
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">ans</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">;
+
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">while</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">bfs</span><span class="cpp1-symbol">())
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">		</span><span class="cpp1-reservedword">for</span><span class="cpp1-symbol">(</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">=</span><span class="cpp1-number">1</span><span class="cpp1-symbol">;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">&lt;=</span><span class="cpp1-identifier">n</span><span class="cpp1-symbol">;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">++)
+</span><span class="cpp1-space">			</span><span class="cpp1-identifier">cur</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">head</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">];
+</span><span class="cpp1-space">		</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">f</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">		</span><span class="cpp1-reservedword">while</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">f</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">dfs</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">s</span><span class="cpp1-symbol">,</span><span class="cpp1-hexadecimal">0x3f3f3f3f3f3f</span><span class="cpp1-symbol">))
+</span><span class="cpp1-space">		</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">			</span><span class="cpp1-identifier">ans</span><span class="cpp1-symbol">+=</span><span class="cpp1-identifier">f</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">		</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">return</span><span class="cpp1-space"> </span><span class="cpp1-identifier">ans</span><span class="cpp1-symbol">;
+}
+
+</span><span class="cpp1-reservedword">void</span><span class="cpp1-space"> </span><span class="cpp1-identifier">add</span><span class="cpp1-symbol">(</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">,</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">,</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">)
+{
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">e</span><span class="cpp1-symbol">[++</span><span class="cpp1-identifier">cnt</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-symbol">{</span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">head</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">],</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">};
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">head</span><span class="cpp1-symbol">[</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">]</span><span class="cpp1-space"> </span><span class="cpp1-symbol">=</span><span class="cpp1-space"> </span><span class="cpp1-identifier">cnt</span><span class="cpp1-symbol">;
+}
+</span><span class="cpp1-reservedword">void</span><span class="cpp1-space"> </span><span class="cpp1-identifier">_add</span><span class="cpp1-symbol">(</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">,</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">,</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">)
+{
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">add</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">);
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">add</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">,</span><span class="cpp1-number">0</span><span class="cpp1-symbol">);
+}
+</span><span class="cpp1-reservedword">signed</span><span class="cpp1-space"> </span><span class="cpp1-identifier">main</span><span class="cpp1-symbol">()
+{
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">cin</span><span class="cpp1-symbol">&gt;&gt;</span><span class="cpp1-identifier">n</span><span class="cpp1-symbol">&gt;&gt;</span><span class="cpp1-identifier">m</span><span class="cpp1-symbol">&gt;&gt;</span><span class="cpp1-identifier">s</span><span class="cpp1-symbol">&gt;&gt;</span><span class="cpp1-identifier">t</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">for</span><span class="cpp1-symbol">(</span><span class="cpp1-reservedword">int</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">=</span><span class="cpp1-number">1</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">&lt;=</span><span class="cpp1-identifier">m</span><span class="cpp1-symbol">;</span><span class="cpp1-space"> </span><span class="cpp1-identifier">i</span><span class="cpp1-symbol">++)
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">{
+</span><span class="cpp1-space">		</span><span class="cpp1-identifier">cin</span><span class="cpp1-symbol">&gt;&gt;</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">&gt;&gt;</span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">&gt;&gt;</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">;
+</span><span class="cpp1-space">		</span><span class="cpp1-identifier">_add</span><span class="cpp1-symbol">(</span><span class="cpp1-identifier">u</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">v</span><span class="cpp1-symbol">,</span><span class="cpp1-identifier">w</span><span class="cpp1-symbol">);
+</span><span class="cpp1-space">	</span><span class="cpp1-symbol">}
+</span><span class="cpp1-space">	</span><span class="cpp1-identifier">cout</span><span class="cpp1-symbol">&lt;&lt;</span><span class="cpp1-identifier">Dinic</span><span class="cpp1-symbol">();
+</span><span class="cpp1-space">	</span><span class="cpp1-reservedword">return</span><span class="cpp1-space"> </span><span class="cpp1-number">0</span><span class="cpp1-symbol">;
+}
+</span></span>
+</code></pre>
+</body>
+</html>
